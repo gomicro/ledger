@@ -80,5 +80,47 @@ func TestLogging(t *testing.T) {
 				Expect(string(mw.Written)).To(Equal(""))
 			}
 		})
+
+		g.It("should log levels", func() {
+			mw := penname.New()
+			l := &Ledger{mw, DebugLevel}
+			msg := "bad wolf"
+
+			l.Debug(msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]", DebugLevel, msg)))
+
+			l.Info(msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]", InfoLevel, msg)))
+
+			l.Warn(msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]", WarnLevel, msg)))
+
+			l.Error(msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]", ErrorLevel, msg)))
+
+			l.Fatal(msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]", FatalLevel, msg)))
+		})
+
+		g.It("should log formatted levels", func() {
+			mw := penname.New()
+			l := &Ledger{mw, DebugLevel}
+			msg := "bad wolf"
+
+			l.Debugf("Additional Info: %v", msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]", DebugLevel, msg)))
+
+			l.Infof("Additional Info: %v", msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]", InfoLevel, msg)))
+
+			l.Warnf("Additional Info: %v", msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]", WarnLevel, msg)))
+
+			l.Errorf("Additional Info: %v", msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]", ErrorLevel, msg)))
+
+			l.Fatalf("Additional Info: %v", msg)
+			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]", FatalLevel, msg)))
+		})
 	})
 }

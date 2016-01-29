@@ -19,3 +19,43 @@ func (l *Ledger) Write(lvl Level, args ...interface{}) {
 		fmt.Fprintf(l.Writer, "%s: %v", lvl, out)
 	}
 }
+
+func (l *Ledger) Debug(args ...interface{}) {
+	l.Write(DebugLevel, args...)
+}
+
+func (l *Ledger) Debugf(f string, args ...interface{}) {
+	l.Write(DebugLevel, fmt.Sprintf(f, args...))
+}
+
+func (l *Ledger) Info(args ...interface{}) {
+	l.Write(InfoLevel, args...)
+}
+
+func (l *Ledger) Infof(f string, args ...interface{}) {
+	l.Write(InfoLevel, fmt.Sprintf(f, args...))
+}
+
+func (l *Ledger) Warn(args ...interface{}) {
+	l.Write(WarnLevel, args...)
+}
+
+func (l *Ledger) Warnf(f string, args ...interface{}) {
+	l.Write(WarnLevel, fmt.Sprintf(f, args...))
+}
+
+func (l *Ledger) Error(args ...interface{}) {
+	l.Write(ErrorLevel, args...)
+}
+
+func (l *Ledger) Errorf(f string, args ...interface{}) {
+	l.Write(ErrorLevel, fmt.Sprintf(f, args...))
+}
+
+func (l *Ledger) Fatal(args ...interface{}) {
+	l.Write(FatalLevel, args...)
+}
+
+func (l *Ledger) Fatalf(f string, args ...interface{}) {
+	l.Write(FatalLevel, fmt.Sprintf(f, args...))
+}
