@@ -3,59 +3,71 @@ package ledger
 import (
 	"fmt"
 	"io"
+	"sync"
 )
 
 type Ledger struct {
-	Writer    io.Writer
-	Threshold Level
+	writer    io.Writer
+	threshold Level
+	mu        sync.Mutex
 }
 
-func (l *Ledger) Write(lvl Level, args ...interface{}) {
-	if lvl <= l.Threshold {
-		out, args := fmt.Sprintf("[%v]", args[0]), args[1:]
-		for _, arg := range args {
-			out += fmt.Sprintf(" [%v]", arg)
-		}
-		fmt.Fprintf(l.Writer, "%s: %v", lvl, out)
+func New(w io.Writer, l Level) *Ledger {
+	return &Ledger{
+		writer:    w,
+		threshold: l,
 	}
 }
 
 func (l *Ledger) Debug(args ...interface{}) {
-	l.Write(DebugLevel, args...)
+	l.write(DebugLevel, args...)
 }
 
 func (l *Ledger) Debugf(f string, args ...interface{}) {
-	l.Write(DebugLevel, fmt.Sprintf(f, args...))
+	l.write(DebugLevel, fmt.Sprintf(f, args...))
 }
 
 func (l *Ledger) Info(args ...interface{}) {
-	l.Write(InfoLevel, args...)
+	l.write(InfoLevel, args...)
 }
 
 func (l *Ledger) Infof(f string, args ...interface{}) {
-	l.Write(InfoLevel, fmt.Sprintf(f, args...))
+	l.write(InfoLevel, fmt.Sprintf(f, args...))
 }
 
 func (l *Ledger) Warn(args ...interface{}) {
-	l.Write(WarnLevel, args...)
+	l.write(WarnLevel, args...)
 }
 
 func (l *Ledger) Warnf(f string, args ...interface{}) {
-	l.Write(WarnLevel, fmt.Sprintf(f, args...))
+	l.write(WarnLevel, fmt.Sprintf(f, args...))
 }
 
 func (l *Ledger) Error(args ...interface{}) {
-	l.Write(ErrorLevel, args...)
+	l.write(ErrorLevel, args...)
 }
 
 func (l *Ledger) Errorf(f string, args ...interface{}) {
-	l.Write(ErrorLevel, fmt.Sprintf(f, args...))
+	l.write(ErrorLevel, fmt.Sprintf(f, args...))
 }
 
 func (l *Ledger) Fatal(args ...interface{}) {
-	l.Write(FatalLevel, args...)
+	l.write(FatalLevel, args...)
 }
 
 func (l *Ledger) Fatalf(f string, args ...interface{}) {
-	l.Write(FatalLevel, fmt.Sprintf(f, args...))
+	l.write(FatalLevel, fmt.Sprintf(f, args...))
+}
+
+func (l *Ledger) write(lvl Level, args ...interface{}) {
+	if lvl <= l.threshold {
+		out, args := fmt.Sprintf("[%v]", args[0]), args[1:]
+		for _, arg := range args {
+			out += fmt.Sprintf(" [%v]", arg)
+		}
+
+		l.mu.Lock()
+		defer l.mu.Unlock()
+		fmt.Fprintf(l.writer, "%s: %v", lvl, out)
+	}
 }
