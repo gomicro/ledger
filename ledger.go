@@ -68,6 +68,6 @@ func (l *Ledger) write(lvl Level, args ...interface{}) {
 
 		l.mu.Lock()
 		defer l.mu.Unlock()
-		fmt.Fprintf(l.writer, "%s: %v", lvl, out)
+		fmt.Fprintf(l.writer, "%s: %v\n", lvl, out)
 	}
 }
