@@ -40,7 +40,7 @@ func TestLogging(t *testing.T) {
 			for lvl := FatalLevel; lvl <= InfoLevel; lvl++ {
 				l.write(lvl, msg)
 				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				mw.Clear()
+				mw.Reset()
 			}
 			l.write(DebugLevel, msg)
 			Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
@@ -50,7 +50,7 @@ func TestLogging(t *testing.T) {
 			for lvl := FatalLevel; lvl <= WarnLevel; lvl++ {
 				l.write(lvl, msg)
 				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				mw.Clear()
+				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > WarnLevel; lvl-- {
 				l.write(lvl, msg)
@@ -62,7 +62,7 @@ func TestLogging(t *testing.T) {
 			for lvl := FatalLevel; lvl <= ErrorLevel; lvl++ {
 				l.write(lvl, msg)
 				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				mw.Clear()
+				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > ErrorLevel; lvl-- {
 				l.write(lvl, msg)
@@ -73,7 +73,7 @@ func TestLogging(t *testing.T) {
 			l = New(mw, FatalLevel)
 			l.write(FatalLevel, msg)
 			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
-			mw.Clear()
+			mw.Reset()
 			for lvl := DebugLevel; lvl > FatalLevel; lvl-- {
 				l.write(lvl, msg)
 				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
