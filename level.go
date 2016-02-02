@@ -1,5 +1,9 @@
 package ledger
 
+import (
+	"strings"
+)
+
 type Level int8
 
 const (
@@ -25,7 +29,7 @@ func (level Level) String() string {
 }
 
 func ParseLevel(lvl string) Level {
-	switch lvl {
+	switch strings.ToUpper(lvl) {
 	case levelStrings[0]:
 		return FatalLevel
 	case levelStrings[1]:
