@@ -2,8 +2,9 @@ language: go
 go:
   - 1.2
   - tip
+before_install:
+  - curl -s http://gocover.io/github.com/gomiro/ledger
 script:
-  - curl -s http://gocover.io/github.com/gomiro/ledger > /dev/null
   - go test -v $(go list ./... | grep -v /vendor/)
 notifications:
   slack:
