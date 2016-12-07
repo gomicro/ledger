@@ -2,6 +2,8 @@ language: go
 go:
   - 1.2
   - tip
+before_script:
+  - curl -s http://gocover.io/github.com/gomicro/ledger > /dev/null
 script:
   - go test -v $(go list ./... | grep -v /vendor/)
 notifications:
