@@ -3,7 +3,7 @@ go:
   - 1.2
   - tip
 before_script:
-  - curl -s https://gocover.io/_/github.com/gomicro/ledger > /dev/null
+  - curl -s -L -I https://gocover.io/_/github.com/gomicro/ledger
 script:
   - go test -v $(go list ./... | grep -v /vendor/)
 notifications:
