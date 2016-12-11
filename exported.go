@@ -48,3 +48,7 @@ func Fatal(args ...interface{}) {
 func Fatalf(f string, args ...interface{}) {
 	std.write(FatalLevel, fmt.Sprintf(f, args...))
 }
+
+func Threshold(level Level) {
+	std.threshold = level
+}

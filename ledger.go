@@ -71,3 +71,7 @@ func (l *Ledger) write(lvl Level, args ...interface{}) {
 		fmt.Fprintf(l.writer, "%s: %v\n", lvl, out)
 	}
 }
+
+func (l *Ledger) Threshold(level Level) {
+	l.threshold = level
+}
