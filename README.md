@@ -1,15 +1,16 @@
 # Ledger
 [![Build Status](https://travis-ci.org/gomicro/ledger.svg)](https://travis-ci.org/gomicro/ledger)
 [![Coverage](http://gocover.io/_badge/github.com/gomicro/ledger)](http://gocover.io/github.com/gomicro/ledger)
+[![Go Reportcard](https://goreportcard.com/badge/github.com/gomicro/ledger)](https://goreportcard.com/report/github.com/gomicro/ledger)
 [![GoDoc](https://godoc.org/github.com/gomicro/ledger?status.png)](https://godoc.org/github.com/gomicro/ledger)
 
-Minimalist Golang log with levels added
+Ledger is a threadsafe, minimalist layer on top of native Go logging with the ability to write to more than standard out and honor log level thresholds.
 
 # Example
 
 ## Standard Logger
 
-```go
+```
 package main
 
 import(
@@ -27,7 +28,7 @@ func main(){
 
 ## Global Logger
 
-```go
+```
 package main
 
 import(
