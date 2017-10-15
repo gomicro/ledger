@@ -1,55 +1,17 @@
 # Ledger
 [![Build Status](https://travis-ci.org/gomicro/ledger.svg)](https://travis-ci.org/gomicro/ledger)
-[![Coverage](http://gocover.io/_badge/github.com/gomicro/ledger)](http://gocover.io/github.com/gomicro/ledger)
 [![Go Reportcard](https://goreportcard.com/badge/github.com/gomicro/ledger)](https://goreportcard.com/report/github.com/gomicro/ledger)
 [![GoDoc](https://godoc.org/github.com/gomicro/ledger?status.png)](https://godoc.org/github.com/gomicro/ledger)
+[![License](https://img.shields.io/github/license/gomicro/ledger.svg)](https://github.com/gomicro/ledger/blob/master/LICENSE.md)
+[![Release](https://img.shields.io/github/release/gomicro/ledger.svg)](https://github.com/gomicro/ledger/releases/latest)
 
 Ledger is a threadsafe, minimalist layer on top of native Go logging with the ability to write to more than standard out and honor log level thresholds.
 
-# Example
+# Requirements
+Golang v1.6 or higher
 
-## Standard Logger
+# Versioning
+The project will be versioned in accordance with [Semver 2.0.0](http://semver.org).  See the [releases](https://github.com/gomicro/vacay/releases) section for the latest version.  Until version 1.0.0 the SDK is considered to be unstable.
 
-```
-package main
-
-import(
-	log "github.com/gomicro/ledger"
-)
-
-func main(){
-	log.Debug("We've got a debug line here")
-	log.Info("We've got a info line here")
-	log.Warn("We've got a warn line here")
-	log.Error("We've got a error line here")
-	log.Fatal("We've got a fatal line here")
-}
-```
-
-## Global Logger
-
-```
-package main
-
-import(
-	"os"
-
-	"github.com/gomicro/ledger"
-)
-
-var (
-	log Ledger
-)
-
-func init(){
-	log = ledger.New(os.Stdout, ledger.DebugLevel)
-}
-
-func main(){
-	log.Debug("We've got a debug line here")
-	log.Info("We've got a info line here")
-	log.Warn("We've got a warn line here")
-	log.Error("We've got a error line here")
-	log.Fatal("We've got a fatal line here")
-}
-```
+# License
+See [LICENSE.md](./LICENSE.md) for more information.

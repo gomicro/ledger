@@ -1,3 +1,6 @@
+// Package ledger provides a threadsafe, minimalist logger on top of native Go
+// logging.  Adding the ability to write to more than standard out and honor
+// log level thresholds.
 package ledger
 
 import (
