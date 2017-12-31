@@ -1,7 +1,7 @@
 # Ledger
 [![Build Status](https://travis-ci.org/gomicro/ledger.svg)](https://travis-ci.org/gomicro/ledger)
 [![Go Reportcard](https://goreportcard.com/badge/github.com/gomicro/ledger)](https://goreportcard.com/report/github.com/gomicro/ledger)
-[![GoDoc](https://godoc.org/github.com/gomicro/ledger?status.png)](https://godoc.org/github.com/gomicro/ledger)
+[![GoDoc](https://godoc.org/github.com/gomicro/ledger?status.svg)](https://godoc.org/github.com/gomicro/ledger)
 [![License](https://img.shields.io/github/license/gomicro/ledger.svg)](https://github.com/gomicro/ledger/blob/master/LICENSE.md)
 [![Release](https://img.shields.io/github/release/gomicro/ledger.svg)](https://github.com/gomicro/ledger/releases/latest)
 
