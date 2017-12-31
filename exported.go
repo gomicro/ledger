@@ -2,7 +2,9 @@ package ledger
 
 import (
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 )
 
 var (
@@ -62,4 +64,24 @@ func Fatalf(f string, args ...interface{}) {
 // Threshold sets the log level threshold for the exported logger
 func Threshold(level Level) {
 	std.threshold = level
+}
+
+// EndpointInfo wraps the given http handler function and logs details of the
+// endpoint at the Info threshold
+func EndpointInfo(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		n := time.Now()
+		fn(w, r)
+		std.Infof("method=%v path=%v duration=%v", r.Method, r.URL.String(), time.Since(n))
+	}
+}
+
+// EndpointDebug wraps the given http handler function and logs details of the
+// endpoint at the Debug threshold
+func EndpointDebug(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		n := time.Now()
+		fn(w, r)
+		std.Debugf("method=%v path=%v duration=%v", r.Method, r.URL.String(), time.Since(n))
+	}
 }
