@@ -95,22 +95,22 @@ func (l *Ledger) Threshold(level Level) {
 	l.threshold = level
 }
 
-// EndpointInfo wraps the given http handler function and logs details of the
-// endpoint at the Info threshold
-func (l *Ledger) EndpointInfo(fn http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+// EndpointInfo wraps the given http handler and logs details of the endpoint at
+// the Info threshold
+func (l *Ledger) EndpointInfo(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		n := time.Now()
-		fn(w, r)
+		next.ServeHTTP(w, r)
 		l.Infof("method=%v path=%v duration=%v", r.Method, r.URL.String(), time.Since(n))
-	}
+	})
 }
 
-// EndpointDebug wraps the given http handler function and logs details of the
-// endpoint at the Debug threshold
-func (l *Ledger) EndpointDebug(fn http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+// EndpointDebug wraps the given http handler and logs details of the endpoint
+// at the Debug threshold
+func (l *Ledger) EndpointDebug(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		n := time.Now()
-		fn(w, r)
+		next.ServeHTTP(w, r)
 		l.Debugf("method=%v path=%v duration=%v", r.Method, r.URL.String(), time.Since(n))
-	}
+	})
 }
