@@ -22,7 +22,7 @@ func TestLogging(t *testing.T) {
 
 			for lvl := FatalLevel; lvl <= DebugLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 			}
 		})
 
@@ -33,50 +33,50 @@ func TestLogging(t *testing.T) {
 			l := New(mw, DebugLevel)
 			for lvl := FatalLevel; lvl <= DebugLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 			}
 
 			l = New(mw, InfoLevel)
 			for lvl := FatalLevel; lvl <= InfoLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				mw.Reset()
 			}
 			l.write(DebugLevel, msg)
-			Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written)).NotTo(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", DebugLevel, msg)))
 			Expect(string(mw.Written)).To(Equal(""))
 
 			l = New(mw, WarnLevel)
 			for lvl := FatalLevel; lvl <= WarnLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > WarnLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).NotTo(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				Expect(string(mw.Written)).To(Equal(""))
 			}
 
 			l = New(mw, ErrorLevel)
 			for lvl := FatalLevel; lvl <= ErrorLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > ErrorLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).NotTo(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				Expect(string(mw.Written)).To(Equal(""))
 			}
 
 			l = New(mw, FatalLevel)
 			l.write(FatalLevel, msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", FatalLevel, msg)))
 			mw.Reset()
 			for lvl := DebugLevel; lvl > FatalLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written)).NotTo(MatchRegexp(fmt.Sprintf("%s: .*goblin.go:\\d+ \\[%v\\]", lvl, msg)))
 				Expect(string(mw.Written)).To(Equal(""))
 			}
 		})
@@ -87,19 +87,19 @@ func TestLogging(t *testing.T) {
 			msg := "bad wolf"
 
 			l.Debug(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\]", DebugLevel, msg)))
 
 			l.Info(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", InfoLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\]\n", InfoLevel, msg)))
 
 			l.Warn(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", WarnLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\]\n", WarnLevel, msg)))
 
 			l.Error(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", ErrorLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\]\n", ErrorLevel, msg)))
 
 			l.Fatal(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\]\n", FatalLevel, msg)))
 		})
 
 		g.It("should log formatted levels", func() {
@@ -108,19 +108,19 @@ func TestLogging(t *testing.T) {
 			msg := "bad wolf"
 
 			l.Debugf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[Additional Info: %v\\]\n", DebugLevel, msg)))
 
 			l.Infof("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", InfoLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[Additional Info: %v\\]\n", InfoLevel, msg)))
 
 			l.Warnf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", WarnLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[Additional Info: %v\\]\n", WarnLevel, msg)))
 
 			l.Errorf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", ErrorLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[Additional Info: %v\\]\n", ErrorLevel, msg)))
 
 			l.Fatalf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[Additional Info: %v\\]\n", FatalLevel, msg)))
 		})
 
 		g.It("should log multiple items", func() {
@@ -130,7 +130,7 @@ func TestLogging(t *testing.T) {
 			msg2 := "doctor!"
 
 			l.Debug(msg1, msg2)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v] [%v]\n", DebugLevel, msg1, msg2)))
+			Expect(string(mw.Written)).To(MatchRegexp(fmt.Sprintf("%s: .*ledger_test.go:\\d+ \\[%v\\] \\[%v\\]\n", DebugLevel, msg1, msg2)))
 		})
 	})
 }

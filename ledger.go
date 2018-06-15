@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -79,8 +80,15 @@ func (l *Ledger) Fatalf(f string, args ...interface{}) {
 
 func (l *Ledger) write(level Level, args ...interface{}) {
 	if level <= l.threshold {
-		out, args := fmt.Sprintf("[%v]", args[0]), args[1:]
-		for _, arg := range args {
+		var out string
+		var subArgs []interface{}
+		_, fileName, lineNumber, ok := runtime.Caller(2)
+		if ok {
+			out, subArgs = fmt.Sprintf("%v:%v [%v]", fileName, lineNumber, args[0]), args[1:]
+		} else {
+			out, subArgs = fmt.Sprintf("[%v]", args[0]), args[1:]
+		}
+		for _, arg := range subArgs {
 			out += fmt.Sprintf(" [%v]", arg)
 		}
 
