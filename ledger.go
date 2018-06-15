@@ -14,10 +14,9 @@ import (
 
 // Ledger represents a logger
 type Ledger struct {
-	writer          io.Writer
-	threshold       Level
-	mu              sync.Mutex
-	writeLineNumber bool
+	writer    io.Writer
+	threshold Level
+	mu        sync.Mutex
 }
 
 // New returns a new Ledger configured with the specified writer and log level
@@ -79,22 +78,14 @@ func (l *Ledger) Fatalf(f string, args ...interface{}) {
 	l.write(FatalLevel, fmt.Sprintf(f, args...))
 }
 
-// ToggleLineNumber turns on/off line-number logging in the Ledger
-func (l *Ledger) ToggleLineNumber() {
-	l.writeLineNumber = !l.writeLineNumber
-}
-
 func (l *Ledger) write(level Level, args ...interface{}) {
 	if level <= l.threshold {
 		var out string
 		var subArgs []interface{}
-		if l.writeLineNumber {
-			_, fileName, lineNumber, ok := runtime.Caller(2)
-			if ok {
-				out, subArgs = fmt.Sprintf("%v:%v [%v]", fileName, lineNumber, args[0]), args[1:]
-			}
-		}
-		if out == "" {
+		_, fileName, lineNumber, ok := runtime.Caller(2)
+		if ok {
+			out, subArgs = fmt.Sprintf("%v:%v [%v]", fileName, lineNumber, args[0]), args[1:]
+		} else {
 			out, subArgs = fmt.Sprintf("[%v]", args[0]), args[1:]
 		}
 		for _, arg := range subArgs {
