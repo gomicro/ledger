@@ -132,5 +132,24 @@ func TestLogging(t *testing.T) {
 			l.Debug(msg1, msg2)
 			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v] [%v]\n", DebugLevel, msg1, msg2)))
 		})
+
+		g.It("should log with line numbers", func() {
+			mw := penname.New()
+			l := New(mw, DebugLevel)
+			l.ToggleLineNumber()
+			l.Debug("hello this is dog")
+			Expect(string(mw.Written)).Should(MatchRegexp(`^DEBUG: .*\/ledger_test.go:\d+ \[hello this is dog\]\n$`))
+		})
+
+		g.It("should toggle line numbers on and off", func() {
+			mw := penname.New()
+			l := New(mw, DebugLevel)
+			l.ToggleLineNumber()
+			l.Debug("hello this is dog")
+			Expect(string(mw.Written)).Should(MatchRegexp(`^DEBUG: .*\/ledger_test.go:\d+ \[hello this is dog\]\n$`))
+			l.ToggleLineNumber()
+			l.Debug("hello this is also dog")
+			Expect(string(mw.Written)).To(Equal("DEBUG: [hello this is also dog]\n"))
+		})
 	})
 }
