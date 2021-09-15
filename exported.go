@@ -2,6 +2,7 @@ package ledger
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"time"
@@ -64,6 +65,11 @@ func Fatalf(f string, args ...interface{}) {
 // Threshold sets the log level threshold for the exported logger
 func Threshold(level Level) {
 	std.threshold = level
+}
+
+// Writer sets the writer for the exported logger
+func Writer(writer io.Writer) {
+	std.writer = writer
 }
 
 // EndpointInfo wraps the given http handler and logs details of the endpoint at
