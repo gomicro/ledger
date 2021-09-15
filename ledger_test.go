@@ -6,12 +6,12 @@ import (
 
 	"github.com/gomicro/penname"
 
-	. "github.com/franela/goblin"
+	"github.com/franela/goblin"
 	. "github.com/onsi/gomega"
 )
 
 func TestLogging(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Logging", func() {
@@ -22,7 +22,8 @@ func TestLogging(t *testing.T) {
 
 			for lvl := FatalLevel; lvl <= DebugLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				mw.Reset()
 			}
 		})
 
@@ -33,51 +34,52 @@ func TestLogging(t *testing.T) {
 			l := New(mw, DebugLevel)
 			for lvl := FatalLevel; lvl <= DebugLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				mw.Reset()
 			}
 
 			l = New(mw, InfoLevel)
 			for lvl := FatalLevel; lvl <= InfoLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
 				mw.Reset()
 			}
 			l.write(DebugLevel, msg)
-			Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
-			Expect(string(mw.Written)).To(Equal(""))
+			Expect(string(mw.Written())).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(""))
 
 			l = New(mw, WarnLevel)
 			for lvl := FatalLevel; lvl <= WarnLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
 				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > WarnLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				Expect(string(mw.Written)).To(Equal(""))
+				Expect(string(mw.Written())).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(""))
 			}
 
 			l = New(mw, ErrorLevel)
 			for lvl := FatalLevel; lvl <= ErrorLevel; lvl++ {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
 				mw.Reset()
 			}
 			for lvl := DebugLevel; lvl > ErrorLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				Expect(string(mw.Written)).To(Equal(""))
+				Expect(string(mw.Written())).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(""))
 			}
 
 			l = New(mw, FatalLevel)
 			l.write(FatalLevel, msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
 			mw.Reset()
 			for lvl := DebugLevel; lvl > FatalLevel; lvl-- {
 				l.write(lvl, msg)
-				Expect(string(mw.Written)).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
-				Expect(string(mw.Written)).To(Equal(""))
+				Expect(string(mw.Written())).NotTo(Equal(fmt.Sprintf("%s: [%v]\n", lvl, msg)))
+				Expect(string(mw.Written())).To(Equal(""))
 			}
 		})
 
@@ -87,19 +89,23 @@ func TestLogging(t *testing.T) {
 			msg := "bad wolf"
 
 			l.Debug(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", DebugLevel, msg)))
+			mw.Reset()
 
 			l.Info(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", InfoLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", InfoLevel, msg)))
+			mw.Reset()
 
 			l.Warn(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", WarnLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", WarnLevel, msg)))
+			mw.Reset()
 
 			l.Error(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", ErrorLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", ErrorLevel, msg)))
+			mw.Reset()
 
 			l.Fatal(msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v]\n", FatalLevel, msg)))
 		})
 
 		g.It("should log formatted levels", func() {
@@ -108,19 +114,23 @@ func TestLogging(t *testing.T) {
 			msg := "bad wolf"
 
 			l.Debugf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", DebugLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", DebugLevel, msg)))
+			mw.Reset()
 
 			l.Infof("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", InfoLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", InfoLevel, msg)))
+			mw.Reset()
 
 			l.Warnf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", WarnLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", WarnLevel, msg)))
+			mw.Reset()
 
 			l.Errorf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", ErrorLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", ErrorLevel, msg)))
+			mw.Reset()
 
 			l.Fatalf("Additional Info: %v", msg)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", FatalLevel, msg)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [Additional Info: %v]\n", FatalLevel, msg)))
 		})
 
 		g.It("should log multiple items", func() {
@@ -130,7 +140,7 @@ func TestLogging(t *testing.T) {
 			msg2 := "doctor!"
 
 			l.Debug(msg1, msg2)
-			Expect(string(mw.Written)).To(Equal(fmt.Sprintf("%s: [%v] [%v]\n", DebugLevel, msg1, msg2)))
+			Expect(string(mw.Written())).To(Equal(fmt.Sprintf("%s: [%v] [%v]\n", DebugLevel, msg1, msg2)))
 		})
 	})
 }
