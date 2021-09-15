@@ -1,7 +1,7 @@
 # github.com/franela/goblin v0.0.0-20210519012713-85d372ac71e2
 ## explicit
 github.com/franela/goblin
-# github.com/gomicro/penname v0.1.0
+# github.com/gomicro/penname v0.1.1
 ## explicit
 github.com/gomicro/penname
 # github.com/onsi/gomega v1.16.0
