@@ -4,8 +4,6 @@ import (
 	"github.com/gomicro/ledger"
 )
 
-var lvl = ledger.InfoLevel
-
 // ExampleExported demonstrates the default exported logger
 func Example_exported() {
 	ledger.Debug("We've got a debug line here")
